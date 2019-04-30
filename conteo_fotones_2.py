@@ -254,3 +254,6 @@ class Medicion():
 #Ejemplo de como importar datos:
 #a = Medicion()
 #a.importar('medicion_sin_laser_100micros','medicion_laser_44_100micros')a
+
+#Hola hola hola
+
