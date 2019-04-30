@@ -1,5 +1,4 @@
-Librería Conteo de fotones
-
+LIBRERIA CONTEO DE FOTONES
 Laboratorio 5
 
 Escrita por:
@@ -11,115 +10,160 @@ Lautaro Gambino: lautarogambino97@gmail.com
 Esta librería está construida con el objetivo de analizar de manera sencilla y rápida la práctica de conteo de fotones de Laboratorio 5 FCEN. Se realizó en el primer cuatrimestre de 2019 con Fernando Stefani como docente de la materia.
 
 ———————————————————————————————————————————
-Class: datos_class
+CLASS: datos_class
 
 Esta clase sirve para nombrar una medición en particular, típicamente se usa un objeto que forme parte de la clase Medicion y dentro de este se heredarán las características que tiene datos_class; no es necesario en la estructura de la librería definir un objeto que pertenezca a esta clase. Posee las siguientes funciones:
-.plot()
+
+  .plot()
 Esta función grafica los voltajes en función del tiempo.
-.plot_volt()
+
+  .plot_volt()
 Esta función grafica los voltajes en función del número de medición.
-.agregar_tiempo(a)
-Em nose bien q poner aca. Igual esta funcion el q usa el codigo nunca la usa. Ni idea, te lo dejo a vos.
-.agregar_voltaje(a)
-Em nose bien q poner aca. Igual esta funcion el q usa el codigo nunca la usa. Ni idea, te lo dejo a vos.
+
+Las siguientes dos funciones internas del programa usadas para agregar tiempo y voltajes no están hechas pensando en que el usuario las usaría:
+  .agregar_tiempo(a)
+  .agregar_voltaje(a)
+
 
 La clase además posee los siguientes atributos:
 
-.tiempo: Aquí se guardan los datos de tiempo.
-.voltaje: Aquí se guardan los datos de voltaje.
+  .tiempo: Aquí se guardan los datos de tiempo.
+  .voltaje: Aquí se guardan los datos de voltaje.
 
 
-Class: Data
+CLASS: Data
 
 Esta clase sirve para analizar los datos importados con la clase Medicion. Permite realizar todos los análisis correspondientes a la práctica de conteo de fotones, como por ejemplo, crear histogramas, elegir el threshold y obtener la función de correlación.  No es necesario en la estructura de la librería definir un objeto que pertenezca a esta clase. Posee las siguientes funciones:
 
-
-.hist(bines)
-
+  .hist(bines)
 Esta función realiza el histograma de la cantidad de fotones detectados en función del voltaje (correspondiente al fotón). En caso de haber importado datos con y sin láser, se superponen ambos histogramas.
 
 Parámetros:
 
-bines: (int o ‘auto’) int: Cantidad de bines que se desea que tenga el histograma. ‘Auto’: Es la cantidad de bines automática de plt.hist().
+    .bines: (int o ‘auto’) int: Cantidad de bines que se desea que tenga el histograma. ‘Auto’: Es la cantidad de bines automática de plt.hist().
 
 En caso de haber importado solo datos con o sin láser o en caso de querer solo el histograma con o sin láser puede utilizar alguna de las siguientes funciones:
 
-.hist_l(bines)
-.hist_sl(bines)
+  .hist_l(bines)
+  .hist_sl(bines)
 
 En cuanto al threshold, la clase posee las siguientes funciones:
 
-.test_thres(threshold)
-
+  .test_thres(threshold)
 Esta función permite probar un determinado threshold para los datos antes de fijarlo definitivamente. Devuelve el histograma de los datos con láser pero cortados filtrados según el threshold. Además cambia de signo los voltajes.
 
 Parámetros:
-threshold: Valor de threshold que se quiere probar.
+    .threshold: Valor de threshold que se quiere probar.
 
-
-.set_thres(threshold)
-
+  .set_thres(threshold)
 Esta función fija definitivamente le threshold, es decir que descarta los datos correspondientes a voltajes mayores al threshold. Esto permite filtrar el ruido (cuentas oscuras) de los datos.
 
 Parámetros:
 
-threshold: Valor de threshold que se quiere fijar.
+    .threshold: Valor de threshold que se quiere fijar.
 
 Para estudiar la estadística de los datos, la clase posee las siguientes funciones:
 
-.hist_conteo(bines)
-
-Esta función realiza un histograma de los datos luego de haber aplicado el threshold. El histograma muestra la probabilidad de obtener una ‘pantalla’ con un número dado de fotones en función de la cantidad de fotones detectados por ‘pantalla’. Si se midió con el osciloscopio, el término ‘pantalla’  se refiere a una pantalla del osciloscopio. Si se midió con la placa de adquisición, el término ‘pantalla’ se refiere al período temporal fijado por el atributo self.ventana_tiempo. La probabilidad se obtiene dividiendo por el número total de pantallas. Escribí esto lo mas claro q pude, pero fijate.
+  .hist_conteo(bines)
+Esta función realiza un histograma de los datos luego de haber aplicado el threshold. El histograma muestra la probabilidad de obtener una ‘pantalla’ con un número dado de fotones en función de la cantidad de fotones detectados por ‘pantalla’. Si se midió con el osciloscopio, el término ‘pantalla’  se refiere a una pantalla del osciloscopio. Si se midió con la placa de adquisición, el término ‘pantalla’ se refiere al período temporal fijado por el atributo self.ventana_tiempo. La probabilidad se obtiene dividiendo por el número total de pantallas.
 
 Parámetros:
 
-bines: (int o ‘auto’) int: Cantidad de bines que se desea que tenga el histograma. ‘Auto’: Es la cantidad de bines automática de plt.hist().
+    .bines: (int o ‘auto’) int: Cantidad de bines que se desea que tenga el histograma. ‘Auto’: Es la cantidad de bines automática de plt.hist().
 
-.poisson()
-
+  .poisson()
 Esta función realiza el mismo histograma que .hist_conteo pero además grafica encima la poissoniana con el mismo valor medio que los datos. Sirve para ver si los datos siguen la estadística de poisson.
 
-.bose()
-
+  .bose()
 Esta función realiza el mismo histograma que .hist_conteo pero además grafica encima la distribución de bose-einstein  con el mismo valor medio que los datos. Sirve para ver si los datos siguen la estadística de bose-einstein.
 
-.tiempo_correlacion(pos)
-
-Esta función grafica la función de correlación normalizada de los datos definida según la librería numpy de python. A partir de la función de correlación se puede calcular el tiempo de correlación de la fuente. No se si poner que se calcula con el ancho a mitad de altura del pico central o algo asi. Supongo q no, pero nose.
+  .tiempo_correlacion(pos)
+Esta función grafica la función de correlación normalizada de los datos definida según la librería numpy de python. A partir de la función de correlación se puede calcular el tiempo de correlación de la fuente.
 
 Parámetros:
 
-pos: Número total de puntos (mediciones) con los que se desea realizar la función de correlación. Esto sirve para cortar el array de datos, ya que si se utilizan demasiados puntos el programa puede tardar demasiado tiempo. Nose si hay q dar toda esta explicacion, tampoco se si dar alguna idea de cuantos puntos hay que tomar.
+    .pos: Número total de puntos (mediciones) con los que se desea realizar la función de correlación. Esto sirve para cortar el array de datos, ya que si se utilizan demasiados puntos el programa puede tardar demasiado tiempo. Nose si hay q dar toda esta explicacion, tampoco se si dar alguna idea de cuantos puntos hay que tomar.
 
 
 La clase además posee los siguientes atributos:
 
-.sl: Aquí donde se encuentran los datos de las mediciones sin láser en la forma correspondiente a la clase datos_class().
-.l: Aquí donde se encuentran los datos de las mediciones con láser en la forma correspondiente a la clase datos_class().
-.filtrado: Aquí se guardan los datos luego de ser filtrados con el threshold.
-.conteomedio:  Es el valor medio de .conteo_por_pantalla.
-.conteo_por_pantalla: Contiene la cantidad de fotones medidas en cada pantalla (en caso de haber medido con la placa de adquisición, entiéndase por pantalla lo que se explicó en .ventana_pantalla).  Q te parece esto? fijate.
-.threshold: Con este atributo puede fijarse el threshold que se desee.
-.ventana_pantalla: Este atributo sirve únicamente si se midió con la placa de adquisición. En tal caso, debe utilizarse para elegir un tiempo T. Los datos serán cortados en intervalos de tiempo T para simular las pantallas de osciloscopio. Este atributo es muy importante para cuando se desea analizar tiempos mucho más cortos y mucho más largos al de coherencia (tc), ya que debe elegirse T<<tc y T>>tc respectivamente. Fijate si te gusta como lo escribí. Cambia lo q quieras.
+  .sl: Aquí donde se encuentran los datos de las mediciones sin láser en la forma correspondiente a la clase datos_class().
+  .l: Aquí donde se encuentran los datos de las mediciones con láser en la forma correspondiente a la clase datos_class().
+  .filtrado: Aquí se guardan los datos luego de ser filtrados con el threshold.
+  .conteomedio:  Es el valor medio de .conteo_por_pantalla.
+  .conteo_por_pantalla: Contiene la cantidad de fotones medidas en cada pantalla (en caso de haber medido con la placa de adquisición, entiéndase por pantalla lo que se explicó en .ventana_pantalla).
+  .threshold: Con este atributo puede fijarse el threshold que se desee.
+  .ventana_pantalla: Este atributo sirve únicamente si se midió con la placa de adquisición. En tal caso, debe utilizarse para elegir un tiempo T. Los datos serán cortados en intervalos de tiempo T para simular las pantallas de osciloscopio. Este atributo es muy importante para cuando se desea analizar tiempos mucho más cortos y mucho más largos al de coherencia (tc), ya que debe elegirse T<<tc y T>>tc respectivamente.
 
 
-Class: Medicion()
+CLASS: Medicion()
 
 Esta clase sirve para fundar una medición la cual puede tener una medición del fotomultiplicador con láser y otra sin láser, para hacer estadística y ver threshold de fotones respectivamente. Esta clase tiene 3 funciones:
 
-.importar(’path_sin_laser’,’path_con_laser’)
+  .importar(’path_sin_laser’,’path_con_laser’)
 Esta función sirve para importar los archivos correspondientes a las mediciones con y sin laser de  la práctica.
 
 Parámetros:
-‘path_sin_laser’ : Es el path de un archivo .csv o una carpeta con múltiples archivos que tenga como primera columna el tiempo y como segunda el voltaje medido.
-’path_con_laser’:: Es el path de un archivo .csv o una carpeta con múltiples archivos que tenga como primera columna el tiempo y como segunda el voltaje medido.
+    .‘path_sin_laser’ : Es el path de un archivo .csv o una carpeta con múltiples archivos que tenga como primera columna el tiempo y como segunda el voltaje medido.
+    .’path_con_laser’:: Es el path de un archivo .csv o una carpeta con múltiples archivos que tenga como primera columna el tiempo y como segunda el voltaje medido.
+    
 El programa buscará primero una carpeta que tenga el nombre del path para importar todos los archivos en ella y en caso que no la encuentre, buscará un archivo que tenga el mismo path para descargarlo. Los datos que se descarguen estarán en Medicion.datos.l y Medicion.datos.sl para con y sin laser respectivamente.
 
 En caso de querer importar solo archivos con o sin láser, puede utilizar alguna de las siguientes funciones:
-.importar_l(’path_con_laser’)
-.importar_sl(’path_sin_laser’)
+
+  .importar_l(’path_con_laser’)
+  .importar_sl(’path_sin_laser’)
+
 
 La clase además posee los siguientes atributos:
-.datos : Es aquí donde se encuentran los datos de las mediciones con y sin láser en la forma correspondiente a la clase Data().
-.archivos: En este atributo se encuentran los archivos que se hayan importado.
+  .datos : Es aquí donde se encuentran los datos de las mediciones con y sin láser en la forma correspondiente a la clase Data().
+  .archivos: En este atributo se encuentran los archivos que se hayan importado.
+  
+  
 Nota: una vez importados, los archivos no se pueden eliminar, por lo que en caso de importar datos de manera incorrecta conviene generar otro objeto que sea de la clase Medicion().
+
+———————————————————————————————————————————
+
+A continuación se presenta un ejemplo de la utilización del código:
+
+    PRIMER CASO: Medición con el osciloscopio
+
+Primero se define ‘a’ como la clase Medicion:
+a = Medicion() 
+
+Se importan los datos, por ejemplo, con y sin laser:
+a.importar(‘path_sin_laser’,’path_con_laser’)
+
+Si se quiere  plotear los datos sin láser de voltaje en función del tiempo, se hace  lo siguiente:
+a.datos.sl.plot()
+
+Para ver el histograma de los datos con y sin láser con 100 bines, se hace esto:
+a.datos.hist(100)
+
+Ahora, para probar un threshold de, por ejemplo, -0.004V y ver cómo resulta el histograma de los datos filtrados, se corre la siguiente línea:
+a.datos.test_thres(-0.004)
+
+Si este threshold es satisfactorio y se quiere fijarlo, se hace lo siguiente:
+a.datos.set_thres(-0.004)
+
+Ahora que ya se fijó el threshold, si se quiere ver si los datos filtrados siguen una distribución poissoniana, se usa la función ‘poisson’ :
+a.datos.poisson()
+
+
+    SEGUNDO CASO: Medición con la placa de adquisición
+
+De nuevo se define  ‘a’ y se importan, en este caso, los datos con láser (este es un ejemplo, podría importarse como en el ejemplo anterior datos de referencia y otros con láser):
+a = Medicion()
+a.importar_l(‘path_sin_laser’)
+
+Se puede graficar la función de correlación con, por ejemplo, los primeros 100000 datos:
+a.datos.tiempo_correlacion(100000)
+
+Luego, con esta función se puede calcular el tiempo de correlación (el criterio más común es tomar el ancho a mitad de altura del pico principal de la función). Si ahora quiero analizar tiempos de integración mucho más cortos o largos al de correlación, se debe definir el atributo .ventana_tiempo respectivamente. Para crear ventanas de tiempo (imitando las pantallas de osciloscopio) de una longitud de, por ejemplo, 0.001s, se hace lo siguiente:
+a.datos.ventana_tiempo = 0.001
+
+Luego de definir la ventana de tiempo se puede fijar el threshold (lo cual se hace igual que en el caso del osciloscopio). Si se intenta hacer esto en el orden contrario, el programa informará que se debe setear el valor de ventana_tiempo primero. 
+
+Ahora que ya se fijó el threshold, y asumiendo que .ventana_tiempo se eligió como un tiempo mucho menor al de correlación, se puede verificar que los datos sigan la estadística de bose-einstein de la siguiente manera:
+a.datos.bose()
+
