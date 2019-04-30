@@ -82,12 +82,15 @@ class Data:
         plt.legend()
         plt.show()
     def test_thres(self,threshold):
-        a = [-element for element in self.l.voltaje if element <= threshold] 
-        fp = float(len([element for element in self.sl.voltaje if element <= threshold ])) / len(self.sl.voltaje) * 100
-        plt.hist(a, bins = 'auto', align = 'left', lw=1, ec="black", density = False, label = 'Distribución con threshold = %f' %threshold)
-        plt.title('Porción de distribución ruido detectada: %f' %fp + '%' )
-        plt.xlabel('Voltaje (V)')
-        plt.ylabel('Número de veces detectado')
+        a = [-element for element in self.l.voltaje if element<= threshold]
+        try: 
+            fp = float(len([element for element in self.sl.voltaje if element<= threshold ])) / len(self.sl.voltaje) * 100
+            plt.title('Porcion de distribucion ruido detectada: %f' %fp + '%' )
+        except:
+            pass
+        plt.hist(a, bins = 'auto', align = 'left',lw=1, ec="black", density = True, label = 'distribucion con threshold = %f' %threshold)
+        plt.xlabel('Voltaje')
+        plt.ylabel('Numero de veces detectado')
         plt.legend()
         plt.show()
     def set_thres(self,threshold):
