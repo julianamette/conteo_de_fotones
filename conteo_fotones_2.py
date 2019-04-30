@@ -126,7 +126,8 @@ class Data:
             plt.ylabel('Número de observaciones')
             plt.legend()
             plt.show()
-    def poisson(self,bines):
+    def poisson(self):
+        bines = int(max(self.conteo_por_pantalla))
         plt.hist(self.conteo_por_pantalla, bins = bines, lw=1, ec="black", label = 'Probabilidad de conteo', density = True, align = 'left')
         x = np.linspace(0,int(max(self.conteo_por_pantalla)), int(max(self.conteo_por_pantalla))+1)
         plt.plot(x, poissoniana(self.conteomedio, x), '-o', label = 'Poissoniana con media %f' %self.conteomedio)
@@ -134,7 +135,8 @@ class Data:
         plt.ylabel('Probabilidad')
         plt.legend()
         plt.show()
-    def bose(self,bines):
+    def bose(self):
+        bines = int(max(self.conteo_por_pantalla))
         plt.hist(self.conteo_por_pantalla, bins = bines, lw=1, ec="black", label = 'Probabilidad de conteo', density = True, align = 'left')
         x = np.linspace(0,int(max(self.conteo_por_pantalla)), int(max(self.conteo_por_pantalla))+1)
         plt.plot(x, bose_einstein(self.conteomedio, x), '-o', label = 'Bose-Einstein con media %f' %self.conteomedio)
@@ -150,7 +152,7 @@ class Data:
         plt.show()
 
 class Medicion():
-    'Esta clase tiene una  caracteristica que es la de datos, dentro de esta se puede poner \\  .hist para ver el histograma \\ .sl o .l para laser o sin laser y dentro de esos ver el .voltaje o .tiempo'
+    'Esta clase tiene una  caracteristica que es la de datos, dentro de esta podes poner \\  .hist para ver el histograma \\ .sl o .l para laser o sin laser y dentro de esos ver el .voltaje o .tiempo '
     def __init__(self):
         self.datos = Data()
         self.archivos = []
@@ -162,14 +164,14 @@ class Medicion():
         except:
             print('Oops! No se encontraron carpetas con esos nombres!')
         else:
-            print('Cargando sin laser')
+            print('cargando sin laser')
             for i in range(len(file_list_sl)):
                 path_sl = path_sin_laser + '/' +  file_list_sl[i]
                 raw = np.genfromtxt(path_sl,delimiter =  ',')
                 self.datos.sl.agregar_voltaje(raw[:,1])
                 self.datos.sl.agregar_tiempo(raw[:,0])
                 progreso(i,len(file_list_sl)-1)
-            print('Cargando con laser')
+            print('cargando con laser')
             for i in range(len(file_list_l)):
                 path_l = path_con_laser + '/' + file_list_l[i]
                 raw = np.genfromtxt(path_l,delimiter =  ',')
@@ -179,33 +181,45 @@ class Medicion():
             self.archivos.append([path_sin_laser, path_con_laser])
         print('Buscando archivos con esos nombres...')
         try:
-            print('Cargando con laser')
+            print('cargando con laser')
             raw = np.genfromtxt(path_con_laser,delimiter =  ',')
         except:
             print('Oops! No se pudo encontrar un archivo csv con el nombre!: '+path_con_laser)
             print('No se pudieron cargar los datos con laser.')
+            try:
+                print('cargando sin laser')
+                raw = np.genfromtxt(path_sin_laser,delimiter =  ',')
+            except:
+                print('Oops! No se pudo encontrar un archivo csv con el nombre!: '+path_sin_laser)
+                print('No se pudieron cargar los datos sin laser.')
+            else:    
+                self.datos.sl.agregar_voltaje(raw[:,1])
+                self.datos.sl.agregar_tiempo(raw[:,0])
+                self.archivos.append([path_sin_laser])
         else:  
             self.datos.l.agregar_voltaje(raw[:,1])
             self.datos.l.agregar_tiempo(raw[:,0])
             self.archivos.append([path_con_laser])
-        try:
-            print('Cargando sin laser')
-            raw = np.genfromtxt(path_sin_laser,delimiter =  ',')
-        except:
-            print('Oops! No se pudo encontrar un archivo csv con el nombre!: '+path_sin_laser)
-            print('No se pudieron cargar los datos sin laser.')
-        else:    
-            self.datos.sl.agregar_voltaje(raw[:,1])
-            self.datos.sl.agregar_tiempo(raw[:,0])
-            self.archivos.append([path_sin_laser])
+        
     def importar_l(self,path_con_laser):
         print('Buscando carpeta con ese nombre...')
         try:
             file_list_l  = [f for f in os.listdir(path_con_laser) if not f.startswith('.')]
         except:
             print('Oops! No se encontro una carpeta con ese nombre!')
+            print('Buscando archivo con ese nombre...')
+            try:
+                print('cargando con laser')
+                raw = np.genfromtxt(path_con_laser,delimiter =  ',')
+            except:
+                print('Oops! No se pudo encontrar un archivo csv con el nombre!: '+path_con_laser)
+                print('No se pudieron cargar los datos con laser.')
+            else:  
+                self.datos.l.agregar_voltaje(raw[:,1])
+                self.datos.l.agregar_tiempo(raw[:,0])
+                self.archivos.append([path_con_laser])
         else:
-            print('Cargando con laser')
+            print('cargando con laser')
             for i in range(len(file_list_l)):
                 path_l = path_con_laser + '/' + file_list_l[i]
                 raw = np.genfromtxt(path_l,delimiter =  ',')
@@ -213,42 +227,31 @@ class Medicion():
                 self.datos.l.agregar_tiempo(raw[:,0])
                 progreso(i,len(file_list_l)-1)
             self.archivos.append([path_con_laser])
-        print('Buscando archivo con ese nombre...')
-        try:
-            print('Cargando con laser')
-            raw = np.genfromtxt(path_con_laser,delimiter =  ',')
-        except:
-            print('Oops! No se pudo encontrar un archivo csv con el nombre!: '+path_con_laser)
-            print('No se pudieron cargar los datos con laser.')
-        else:  
-            self.datos.l.agregar_voltaje(raw[:,1])
-            self.datos.l.agregar_tiempo(raw[:,0])
-            self.archivos.append([path_con_laser])
     def importar_sl(self,path_sin_laser):
         print('Buscando carpeta con ese nombre...')
         try:
             file_list_sl = [f for f in os.listdir(path_sin_laser) if not f.startswith('.')]
         except:
             print('Oops! No se encontraron carpetas con esos nombres!')
+            print('Buscando archivo con ese nombre...')
+            try:
+                print('cargando con laser')
+                raw = np.genfromtxt(path_sin_laser,delimiter =  ',')
+            except:
+                print('Oops! No se pudo encontrar un archivo csv con el nombre!: '+path_sin_laser)
+                print('No se pudieron cargar los datos sin laser.')
+            else:  
+                self.datos.sl.agregar_voltaje(raw[:,1])
+                self.datos.sl.agregar_tiempo(raw[:,0])
+                self.archivos.append([path_sin_laser])
         else:
-            print('Cargando sin laser')
+            print('cargando sin laser')
             for i in range(len(file_list_sl)):
                 path_sl = path_sin_laser + '/' +  file_list_sl[i]
                 raw = np.genfromtxt(path_sl,delimiter =  ',')
                 self.datos.sl.agregar_voltaje(raw[:,1])
                 self.datos.sl.agregar_tiempo(raw[:,0])
                 progreso(i,len(file_list_sl)-1)
-            self.archivos.append([path_sin_laser])
-        print('Buscando archivo con ese nombre...')
-        try:
-            print('Cargando con laser')
-            raw = np.genfromtxt(path_sin_laser,delimiter =  ',')
-        except:
-            print('Oops! No se pudo encontrar un archivo csv con el nombre!: '+path_sin_laser)
-            print('No se pudieron cargar los datos sin laser.')
-        else:  
-            self.datos.sl.agregar_voltaje(raw[:,1])
-            self.datos.sl.agregar_tiempo(raw[:,0])
             self.archivos.append([path_sin_laser])
             
 #Ejemplo de como importar datos:
